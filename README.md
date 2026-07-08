@@ -120,9 +120,9 @@ python app.py
 
 ## Author
 
-Joshua Osafo
+Kappa-Team
+Cloud Build with Peers
+Akwannya Hub - https://www.linkedin.com/search/results/all/?keywords=Akwannya%20Hub&origin=RICH_QUERY_SUGGESTION&heroEntityKey=urn%3Ali%3Aorganization%3A110795186&position=0
 
-Cybersecurity Analyst | Cloud Computing Enthusiast
 
-LinkedIn:
-https://linkedin.com/in/joshua-osafo-8b7101287
+
