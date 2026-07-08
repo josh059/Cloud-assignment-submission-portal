@@ -39,7 +39,7 @@ The Cloud Assignment Submission Portal provides a centralized platform where stu
 
 ### Backend
 
-- Python (Flask or AWS Lambda)
+- Python (AWS Lambda)
 
 ### Cloud Services
 
