@@ -92,8 +92,7 @@ README.md
 
 Clone the repository
 
-git clone https://github.com/yourusername/cloud-assignment-submission-portal.git
-
+git clone https://github.com/josh059/Cloud-assignment-submission-portal.git
 Navigate into the project
 
 cd cloud-assignment-submission-portal
