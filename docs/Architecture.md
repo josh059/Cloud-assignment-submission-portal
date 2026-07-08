@@ -25,43 +25,22 @@ Monitoring
 Permissions
 - IAM
 
+User
 
-                                Cloud Assignment Submission Portal
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                                 Student/User                                │
-└───────────────────────────────┬──────────────────────────────────────────────┘
-                                │
-                                │ HTTPS
-                                ▼
-                  ┌──────────────────────────────┐
-                  │  Static Website (Amazon S3)  │
-                  │  HTML • CSS • JavaScript     │
-                  └──────────────┬───────────────┘
-                                 │
-                                 │ API Request
-                                 ▼
-                  ┌──────────────────────────────┐
-                  │      Amazon API Gateway      │
-                  │        HTTP API              │
-                  └──────────────┬───────────────┘
-                                 │
-                                 ▼
-                  ┌──────────────────────────────┐
-                  │      AWS Lambda Function      │
-                  │   uploadAssignment (Python)   │
-                  └───────┬───────────────┬────────┘
-                          │               │
-                          │               │
-              Store File  │               │ Store Metadata
-                          ▼               ▼
-            ┌────────────────────┐   ┌──────────────────────┐
-            │     Amazon S3      │   │   Amazon DynamoDB    │
-            │ Assignment Storage │   │ Submission Records   │
-            └────────────────────┘   └──────────────────────┘
-                          │
-                          │
-                          ▼
-                 ┌──────────────────────┐
-                 │ Amazon CloudWatch    │
-                 │ Logs & Monitoring    │
-                 └──────────────────────┘
+↓
+
+S3 Website
+
+↓
+
+API Gateway
+
+↓
+
+Lambda
+
+↙          ↘
+
+S3       DynamoDB
+
+<img width="1024" height="1536" alt="P1_20260708_114803" src="https://github.com/user-attachments/assets/92f9d51a-dc2c-4cef-b376-0cbc7255a23e" />
