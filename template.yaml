@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Cloud Assignment Submission Portal using S3, API Gateway, Lambda, DynamoDB, IAM, and CloudWatch.
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Default: "*"
+    Description: CORS origin for the frontend website.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 30
+    MemorySize: 256
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        ASSIGNMENTS_BUCKET: !Ref AssignmentFilesBucket
+        SUBMISSIONS_TABLE: !Ref SubmissionsTable
+        ALLOWED_ORIGIN: !Ref AllowedOrigin
+        MAX_FILE_BYTES: "6291456"
+
+Resources:
+  FrontendWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  FrontendWebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendWebsiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: PublicReadForStaticWebsite
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "${FrontendWebsiteBucket.Arn}/*"
+
+  AssignmentFilesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+
+  SubmissionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: submissionId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: submissionId
+          KeyType: HASH
+
+  AssignmentApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - !Ref AllowedOrigin
+        AllowMethods:
+          - OPTIONS
+          - GET
+          - POST
+        AllowHeaders:
+          - Content-Type
+
+  UploadAssignmentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: lambda_function.lambda_handler
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref AssignmentFilesBucket
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SubmissionsTable
+      Events:
+        CreateSubmission:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssignmentApi
+            Path: /submissions
+            Method: POST
+        ListSubmissions:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssignmentApi
+            Path: /submissions
+            Method: GET
+        DownloadSubmission:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref AssignmentApi
+            Path: /submissions/{submissionId}/download
+            Method: GET
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint for frontend config.js.
+    Value: !Sub "https://${AssignmentApi}.execute-api.${AWS::Region}.amazonaws.com"
+  FrontendBucketName:
+    Description: S3 bucket for static frontend files.
+    Value: !Ref FrontendWebsiteBucket
+  FrontendWebsiteUrl:
+    Description: S3 static website URL.
+    Value: !Sub "http://${FrontendWebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
+  AssignmentFilesBucketName:
+    Description: Private S3 bucket that stores submitted assignment files.
+    Value: !Ref AssignmentFilesBucket
+  SubmissionsTableName:
+    Description: DynamoDB table that stores submission metadata.
+    Value: !Ref SubmissionsTable

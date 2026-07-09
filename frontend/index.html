@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Assignment Submission Portal</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Cloud Build With Peers - Cohort 1</p>
+        <h1>Assignment Submission Portal</h1>
+      </div>
+      <div class="status" id="apiStatus">
+        <span class="status-dot"></span>
+        Demo mode
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <section class="workspace" aria-label="Assignment workspace">
+        <nav class="tabs" aria-label="Portal sections">
+          <button class="tab active" type="button" data-tab="student">
+            <span aria-hidden="true">+</span>
+            Student Upload
+          </button>
+          <button class="tab" type="button" data-tab="lecturer">
+            <span aria-hidden="true">#</span>
+            Lecturer Dashboard
+          </button>
+          <button class="tab" type="button" data-tab="cloud">
+            <span aria-hidden="true">~</span>
+            Cloud Flow
+          </button>
+        </nav>
+
+        <section class="tab-panel active" id="studentPanel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Student</p>
+              <h2>Submit assignment</h2>
+            </div>
+            <p>Upload PDF or DOCX files to secure cloud storage with searchable submission metadata.</p>
+          </div>
+
+          <form class="upload-form" id="uploadForm">
+            <div class="form-grid">
+              <label>
+                Student name
+                <input id="studentName" name="studentName" autocomplete="name" placeholder="Ama Mensah" required>
+              </label>
+              <label>
+                Student ID
+                <input id="studentId" name="studentId" placeholder="CBWP-001" required>
+              </label>
+              <label>
+                Course
+                <input id="course" name="course" placeholder="Cloud Computing" required>
+              </label>
+              <label>
+                Assignment title
+                <input id="assignmentTitle" name="assignmentTitle" placeholder="Serverless Architecture Report" required>
+              </label>
+            </div>
+
+            <label class="drop-zone" id="dropZone">
+              <input id="assignmentFile" name="assignmentFile" type="file" accept=".pdf,.doc,.docx" required>
+              <span class="file-icon" aria-hidden="true">PDF</span>
+              <strong id="fileTitle">Choose a PDF, DOC, or DOCX file</strong>
+              <small id="fileMeta">Maximum recommended size: 6 MB for API Gateway JSON upload.</small>
+            </label>
+
+            <div class="form-actions">
+              <button class="primary-button" type="submit" id="submitButton">Upload assignment</button>
+              <button class="ghost-button" type="reset">Clear</button>
+            </div>
+          </form>
+
+          <div class="notice" id="uploadMessage" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="tab-panel" id="lecturerPanel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Lecturer</p>
+              <h2>Manage submissions</h2>
+            </div>
+            <button class="ghost-button" type="button" id="refreshButton">Refresh</button>
+          </div>
+
+          <div class="toolbar">
+            <label>
+              Search
+              <input id="searchInput" placeholder="Student, course, or assignment">
+            </label>
+            <label>
+              Course filter
+              <select id="courseFilter">
+                <option value="">All courses</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="submissions-table" role="region" aria-label="Submitted assignments" tabindex="0">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Assignment</th>
+                  <th>Course</th>
+                  <th>Submitted</th>
+                  <th>File</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="submissionsBody"></tbody>
+            </table>
+          </div>
+          <p class="empty-state" id="emptyState">No submissions yet.</p>
+        </section>
+
+        <section class="tab-panel" id="cloudPanel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">AWS services</p>
+              <h2>Hosted cloud architecture</h2>
+            </div>
+            <p>The app is designed for S3 static hosting, API Gateway, Lambda, S3 object storage, DynamoDB metadata, IAM permissions, and CloudWatch logs.</p>
+          </div>
+
+          <div class="cloud-map" aria-label="AWS architecture flow">
+            <div class="cloud-step">Student browser</div>
+            <div class="cloud-arrow">HTTPS</div>
+            <div class="cloud-step accent">S3 static website</div>
+            <div class="cloud-arrow">API request</div>
+            <div class="cloud-step accent">API Gateway</div>
+            <div class="cloud-arrow">Invoke</div>
+            <div class="cloud-step accent">Lambda</div>
+            <div class="cloud-branches">
+              <div class="cloud-step">S3 assignments bucket</div>
+              <div class="cloud-step">DynamoDB submissions table</div>
+              <div class="cloud-step">CloudWatch logs</div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="summary" aria-label="Portal summary">
+        <div class="summary-visual" aria-hidden="true">
+          <div class="server-rack"></div>
+          <div class="upload-card mini-card">Upload</div>
+          <div class="storage-card mini-card">S3</div>
+          <div class="data-card mini-card">DDB</div>
+        </div>
+        <div class="metric-grid">
+          <div>
+            <strong id="totalCount">0</strong>
+            <span>Submissions</span>
+          </div>
+          <div>
+            <strong id="courseCount">0</strong>
+            <span>Courses</span>
+          </div>
+        </div>
+        <div class="checklist">
+          <h3>Included features</h3>
+          <p><span></span> Student assignment upload</p>
+          <p><span></span> Lecturer dashboard</p>
+          <p><span></span> Cloud metadata storage</p>
+          <p><span></span> Download links</p>
+        </div>
+      </aside>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
