@@ -56,26 +56,6 @@ The Cloud Assignment Submission Portal provides a centralized platform where stu
 
 <img width="1024" height="1536" alt="Copilot_20260726_203417" src="https://github.com/user-attachments/assets/358df8c2-28e7-420c-bfc4-953d458e54b9" />
 
-Student
-
-↓
-
-Frontend (S3 Static Website)
-
-↓
-
-API Gateway
-
-↓
-
-AWS Lambda
-
-↓
-
-Amazon S3 + DynamoDB
-
----
-
 ## Project Structure
 
 frontend/
